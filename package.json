@@ -1,5 +1,5 @@
 {
-  "name": "movie_app",
+  "name": "bid_app",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "generate:typings": "ts-node generate-typings.ts",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -33,7 +34,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "ts-morph": "^21.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

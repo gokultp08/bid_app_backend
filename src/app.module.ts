@@ -6,11 +6,18 @@ import { LoggerMiddleware } from './utils/logger.middleware';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ProductModule } from './product/product.module';
+import { KnexModule } from 'nest-knexjs';
+import { DatabaseConfigService } from './config/database.config.service';
+import { AppRepository } from './app.repository';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
+    }),
+    KnexModule.forRootAsync({
+      useClass: DatabaseConfigService,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -20,7 +27,7 @@ import { ProductModule } from './product/product.module';
     ProductModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppRepository],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

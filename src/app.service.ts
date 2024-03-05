@@ -12,4 +12,15 @@ export class AppService {
   getDataBaseTest(): any {
     return this.appRepository.getTest();
   }
+
+  googleLogin(req) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
+  }
 }

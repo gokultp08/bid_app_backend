@@ -9,6 +9,7 @@ import { ProductModule } from './product/product.module';
 import { KnexModule } from 'nest-knexjs';
 import { DatabaseConfigService } from './config/database.config.service';
 import { AppRepository } from './app.repository';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AppRepository } from './app.repository';
       installSubscriptionHandlers: true,
     }),
     ProductModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService, AppRepository],

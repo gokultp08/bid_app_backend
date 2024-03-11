@@ -1,20 +1,26 @@
 import { Injectable } from '@nestjs/common';
-// import { NewPost, UpdatePost } from 'src/graphql.schema';
+import { ProductRepository } from './product.repository';
+import { NewProduct } from 'src/graphql/utils/newproduct.model';
+import { Product } from 'src/graphql/models/product.model';
 
 @Injectable()
 export class ProductService {
-  constructor() {}
+  constructor(private readonly productRepository: ProductRepository) {}
 
-  async findOne(id: string): Promise<string | null> {
-    return null;
+  async getProductById(id: string): Promise<Product | null> {
+    return this.productRepository.findOne(id);
   }
 
-  async findAll(): Promise<string[]> {
-    return null;
+  async getProducts(): Promise<Product[]> {
+    return [];
   }
 
-  async create(input: any): Promise<string> {
-    return null;
+  async createProduct(data: NewProduct): Promise<Product> {
+    // try {
+    return this.productRepository.create(data);
+    // } catch (error) {
+    //   throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
   }
 
   async update(params: any): Promise<string> {

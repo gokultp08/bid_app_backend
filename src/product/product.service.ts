@@ -12,7 +12,7 @@ export class ProductService {
   }
 
   async getProducts(): Promise<Product[]> {
-    return [];
+    return this.productRepository.findAll()
   }
 
   async createProduct(data: NewProduct): Promise<Product> {

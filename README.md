@@ -34,3 +34,17 @@ image,
 createdTime
 }
 }
+
+query GetProducts {
+    getProducts {
+        id
+        title
+        description
+        endTime
+        owner
+        status
+        price
+        image
+        createdTime
+    }
+}

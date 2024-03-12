@@ -18,8 +18,9 @@ export class ProductRepository {
     return mapProductRowToProduct(result?.rows[0]);
   }
 
-  async findAll(): Promise<string[]> {
-    return null;
+  async findAll(): Promise<Product[]> {
+    const result = await this.knex.raw('SELECT * FROM products');
+    return result.rows.map((item) => mapProductRowToProduct(item));
   }
 
   async create(data: NewProduct): Promise<Product> {

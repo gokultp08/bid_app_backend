@@ -1,7 +1,10 @@
 import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 import { Product } from 'src/graphql/models/product.model';
-import { NewProduct } from 'src/graphql/utils/newproduct.model';
+import {
+  NewProduct,
+  UpdateProductStatus,
+} from 'src/graphql/utils/newproduct.model';
 // import { Post, NewPost, UpdatePost } from 'src/graphql.schema';
 // import { PubSub } from 'graphql-subscriptions';
 
@@ -29,15 +32,19 @@ export class ProductResolvers {
     console.log('resolver', createProduct);
     return this.productService.createProduct(createProduct);
   }
-  // @Mutation('updateProduct')
-  // async update(@Args('input') args: string): Promise<string> {
-  //   return this.productService.update(args);
-  // }
 
-  // @Mutation('deleteProduct')
-  // async delete(@Args('id') args: string): Promise<string> {
-  //   return this.productService.delete(args);
-  // }
+  @Mutation((returns) => Product)
+  updateProductStatus(
+    @Args('updateProductStatus') product: UpdateProductStatus,
+  ): Promise<Product> {
+    console.log('resolver', product);
+    return this.productService.updateProductStatus(product);
+  }
+
+  @Mutation((returns) => String)
+  deleteProduct(@Args('id') id: string): Promise<string> {
+    return this.productService.deleteProduct(id);
+  }
 
   // @Subscription('productCreated')
   // postCreated() {

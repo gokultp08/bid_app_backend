@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ProductRepository } from './product.repository';
-import { NewProduct } from 'src/graphql/utils/newproduct.model';
+import {
+  NewProduct,
+  UpdateProductStatus,
+} from 'src/graphql/utils/newproduct.model';
 import { Product } from 'src/graphql/models/product.model';
+import { ProductStatus } from 'src/helpers/enums';
 
 @Injectable()
 export class ProductService {
@@ -12,24 +16,21 @@ export class ProductService {
   }
 
   async getProducts(): Promise<Product[]> {
-    return this.productRepository.findAll()
+    return this.productRepository.findAll();
   }
 
   async createProduct(data: NewProduct): Promise<Product> {
-    // try {
     return this.productRepository.create(data);
-    // } catch (error) {
-    //   throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    // }
   }
 
-  async update(params: any): Promise<string> {
-    const { id, ...params_without_id } = params;
-
-    return null;
+  async updateProductStatus(data: UpdateProductStatus): Promise<Product> {
+    const oldData = await this.getProductById(data.id);
+    return this.productRepository.update(data.id, {
+      status: ProductStatus.BID_STARTED,
+    });
   }
 
-  async delete(id: string): Promise<string> {
-    return null;
+  async deleteProduct(id: string): Promise<string> {
+    return this.productRepository.delete(id);
   }
 }

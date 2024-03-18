@@ -24,7 +24,6 @@ export class ProductRepository {
   }
 
   async create(data: NewProduct): Promise<Product> {
-    throw new HttpException('soemtjing happened', HttpStatus.NOT_ACCEPTABLE);
     await this.knex.raw(`CREATE TABLE IF NOT EXISTS products (
     id VARCHAR(255) PRIMARY KEY,title VARCHAR(255) NOT NULL,description TEXT NOT NULL,endTime TIMESTAMP NOT NULL,
     owner VARCHAR(255),status VARCHAR(255) NOT NULL,price DECIMAL(10, 2) NOT NULL,image VARCHAR(255) NOT NULL,
@@ -45,20 +44,28 @@ export class ProductRepository {
       ],
     );
 
-    const fetchData = await this.knex.raw(
-      'SELECT * FROM products where id = ?',
-      [id],
-    );
+    await this.knex.raw('SELECT * FROM products where id = ?', [id]);
+    return await this.findOne(id);
+  }
+
+  async update(id: string, fields: Record<string, any>): Promise<Product> {
+    const columnName = Object.keys(fields);
+    const columnValue = Object.values(fields);
+
+    const updateFieldQuery = columnName
+      .map((column) => `${column} = ?`)
+      .join(', ');
+
+    const query = `UPDATE products SET ${updateFieldQuery} WHERE id = ?`;
+    const params = [...columnValue, id];
+
+    await this.knex.raw(query, [...columnValue, id]);
+
     return this.findOne(id);
   }
 
-  async update(params: any): Promise<string> {
-    const { id, ...params_without_id } = params;
-
-    return null;
-  }
-
   async delete(id: string): Promise<string> {
-    return null;
+    await this.knex.raw('DELETE FROM products WHERE id = ?', [id]);
+    return 'OK';
   }
 }

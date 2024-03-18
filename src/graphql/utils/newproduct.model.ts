@@ -20,3 +20,12 @@ export class NewProduct {
   @Field()
   image: string;
 }
+
+@InputType()
+export class UpdateProductStatus {
+  @Field()
+  id: string;
+
+  @Field()
+  status: string;
+}

@@ -1,18 +1,12 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 
 @ObjectType()
-export class Product {
+export class Bid {
   @Field()
   id: string;
 
   @Field()
-  title: string;
-
-  @Field()
-  description: string;
-
-  @Field()
-  endTime: string;
+  productId: string; // foreign key
 
   @Field()
   owner: string;
@@ -22,9 +16,6 @@ export class Product {
 
   @Field()
   price: number;
-
-  @Field({ nullable: true })
-  image?: string;
 
   @Field()
   createdTime?: string;

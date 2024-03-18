@@ -16,7 +16,7 @@ export class AppController {
     return this.appService.getDataBaseTest();
   }
 
-  @Get()
+  @Get('login')
   @UseGuards(AuthGuard('google'))
   async googleAuth(@Req() req) {}
 

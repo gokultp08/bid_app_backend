@@ -1,28 +1,19 @@
 import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class NewProduct {
+export class NewBid {
   @Field()
-  title: string;
-
-  @Field()
-  description: string;
-
-  @Field()
-  endTime: string;
+  productId: string; // foreign key
 
   @Field()
   owner: string;
 
   @Field()
-  price: string;
-
-  @Field()
-  image: string;
+  price: number;
 }
 
 @InputType()
-export class UpdateProductStatus {
+export class UpdateBidStatus {
   @Field()
   id: string;
 

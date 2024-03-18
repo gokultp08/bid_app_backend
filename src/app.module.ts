@@ -10,6 +10,7 @@ import { KnexModule } from 'nest-knexjs';
 import { DatabaseConfigService } from './config/database.config.service';
 import { AppRepository } from './app.repository';
 import { AuthModule } from './auth/auth.module';
+import { BidModule } from './bid/bid.module';
 
 @Module({
   imports: [
@@ -23,8 +24,12 @@ import { AuthModule } from './auth/auth.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/schema.gql',
+      context: ({ req }) => {
+        return { request: req };
+      },
     }),
     ProductModule,
+    BidModule,
     AuthModule,
   ],
   controllers: [AppController],

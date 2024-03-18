@@ -1,11 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Args, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Knex } from 'knex';
 import { InjectConnection } from 'nest-knexjs';
 import { Product } from 'src/graphql/models/product.model';
-import { NewProduct } from 'src/graphql/utils/newproduct.model';
+import { NewProduct } from 'src/graphql/utils/product-input.model';
 import { ProductStatus } from 'src/helpers/enums';
-import { mapProductRowToProduct } from 'src/helpers/mapper';
+import { QueryResultMapper } from 'src/helpers/query-result.mapper';
 import { v4 as uuid } from 'uuid';
 
 export class ProductRepository {
@@ -15,12 +13,14 @@ export class ProductRepository {
     const result = await this.knex.raw('SELECT * FROM products where id = ?', [
       id,
     ]);
-    return mapProductRowToProduct(result?.rows[0]);
+    return QueryResultMapper.mapProductRowToProduct(result?.rows[0]);
   }
 
   async findAll(): Promise<Product[]> {
     const result = await this.knex.raw('SELECT * FROM products');
-    return result.rows.map((item) => mapProductRowToProduct(item));
+    return result.rows.map((item) =>
+      QueryResultMapper.mapProductRowToProduct(item),
+    );
   }
 
   async create(data: NewProduct): Promise<Product> {
@@ -57,7 +57,6 @@ export class ProductRepository {
       .join(', ');
 
     const query = `UPDATE products SET ${updateFieldQuery} WHERE id = ?`;
-    const params = [...columnValue, id];
 
     await this.knex.raw(query, [...columnValue, id]);
 

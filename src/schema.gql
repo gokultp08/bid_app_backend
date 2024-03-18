@@ -9,20 +9,34 @@ type Product {
   endTime: String!
   owner: String!
   status: String!
-  price: String!
+  price: Float!
   image: String
+  createdTime: String!
+  bids: [Bid!]!
+}
+
+type Bid {
+  id: String!
+  productId: String!
+  owner: String!
+  status: String!
+  price: Float!
   createdTime: String!
 }
 
 type Query {
   getProducts: [Product!]!
   getProductById(id: String!): Product
+  getBids: [Bid!]!
+  getBidById(id: String!): Bid
 }
 
 type Mutation {
   createProduct(createProduct: NewProduct!): Product!
   updateProductStatus(updateProductStatus: UpdateProductStatus!): Product!
   deleteProduct(id: String!): String!
+  createBid(createBid: NewBid!): Bid!
+  updateBidStatus(updateProductStatus: UpdateBidStatus!): Bid!
 }
 
 input NewProduct {
@@ -30,11 +44,22 @@ input NewProduct {
   description: String!
   endTime: String!
   owner: String!
-  price: String!
+  price: Float!
   image: String!
 }
 
 input UpdateProductStatus {
+  id: String!
+  status: String!
+}
+
+input NewBid {
+  productId: String!
+  owner: String!
+  price: Float!
+}
+
+input UpdateBidStatus {
   id: String!
   status: String!
 }

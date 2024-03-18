@@ -3,7 +3,7 @@ import { ProductRepository } from './product.repository';
 import {
   NewProduct,
   UpdateProductStatus,
-} from 'src/graphql/utils/newproduct.model';
+} from 'src/graphql/utils/product-input.model';
 import { Product } from 'src/graphql/models/product.model';
 import { ProductStatus } from 'src/helpers/enums';
 
@@ -26,7 +26,7 @@ export class ProductService {
   async updateProductStatus(data: UpdateProductStatus): Promise<Product> {
     const oldData = await this.getProductById(data.id);
     return this.productRepository.update(data.id, {
-      status: ProductStatus.BID_STARTED,
+      status: data.status,
     });
   }
 

@@ -1,20 +1,32 @@
-import { Resolver, Query, Mutation, Args, Subscription } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Subscription,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ProductService } from './product.service';
 import { Product } from 'src/graphql/models/product.model';
 import {
   NewProduct,
   UpdateProductStatus,
-} from 'src/graphql/utils/newproduct.model';
-// import { Post, NewPost, UpdatePost } from 'src/graphql.schema';
-// import { PubSub } from 'graphql-subscriptions';
-
-// const pubSub = new PubSub();
+} from 'src/graphql/utils/product-input.model';
+import { Bid } from 'src/graphql/models/bid.model';
+import { BidService } from 'src/bid/bid.service';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Resolver(Product)
 export class ProductResolvers {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly bidService: BidService,
+  ) {}
 
   @Query(() => [Product])
+  @UseGuards(JwtAuthGuard)
   async getProducts(): Promise<Product[]> {
     return this.productService.getProducts();
   }
@@ -29,7 +41,6 @@ export class ProductResolvers {
   createProduct(
     @Args('createProduct') createProduct: NewProduct,
   ): Promise<Product> {
-    console.log('resolver', createProduct);
     return this.productService.createProduct(createProduct);
   }
 
@@ -37,7 +48,6 @@ export class ProductResolvers {
   updateProductStatus(
     @Args('updateProductStatus') product: UpdateProductStatus,
   ): Promise<Product> {
-    console.log('resolver', product);
     return this.productService.updateProductStatus(product);
   }
 
@@ -46,8 +56,9 @@ export class ProductResolvers {
     return this.productService.deleteProduct(id);
   }
 
-  // @Subscription('productCreated')
-  // postCreated() {
-  //   // return pubSub.asyncIterator('postCreated');
-  // }
+  @ResolveField(() => [Bid])
+  async bids(@Parent() product: Product): Promise<Bid[]> {
+    console.log('bidsss', product);
+    return this.bidService.getBidsbyProductId(product.id);
+  }
 }

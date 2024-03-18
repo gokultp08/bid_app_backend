@@ -1,3 +1,13 @@
+RUN APP
+Use docker to run postgres instance
+docker run --name postgres_container -e POSTGRES_USER=db_user -e POSTGRES_PASSWORD=db_password -e POSTGRES_DB=bid_db -p 5432:5432 -d postgres
+npm run start:dev
+
+Using Docker
+docker build -t my-nest-app .
+docker run --name my-nest-app-container --link postgres_container -p 3000:3000 -d my-nest-app
+Adjust DATABASE_HOST wrt to address of postgres docker instance running
+
 GRAPHQL SCRIPTS
 mutation {
 createProduct(
@@ -33,18 +43,4 @@ price,
 image,
 createdTime
 }
-}
-
-query GetProducts {
-    getProducts {
-        id
-        title
-        description
-        endTime
-        owner
-        status
-        price
-        image
-        createdTime
-    }
 }

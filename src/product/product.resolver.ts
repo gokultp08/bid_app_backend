@@ -3,9 +3,9 @@ import {
   Query,
   Mutation,
   Args,
-  Subscription,
   ResolveField,
   Parent,
+  Context,
 } from '@nestjs/graphql';
 import { ProductService } from './product.service';
 import { Product } from 'src/graphql/models/product.model';
@@ -19,6 +19,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Resolver(Product)
+@UseGuards(JwtAuthGuard)
 export class ProductResolvers {
   constructor(
     private readonly productService: ProductService,
@@ -26,14 +27,13 @@ export class ProductResolvers {
   ) {}
 
   @Query(() => [Product])
-  @UseGuards(JwtAuthGuard)
-  async getProducts(): Promise<Product[]> {
+  async getProducts(@Context() context): Promise<Product[]> {
     return this.productService.getProducts();
   }
 
   @Query((returns) => Product, { nullable: true })
-  getProductById(@Args('id') id: string) {
-    console.log('id', id);
+  getProductById(@Args('id') id: string, @Context() context) {
+    // console.log('context', context.request.user);
     return this.productService.getProductById(id);
   }
 

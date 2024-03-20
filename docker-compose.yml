@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgresdb:
+    image: postgres
+    restart: unless-stopped
+    user: postgres
+    env_file: .env
+    environment:
+      - POSTGRES_USER=$DATABASE_USER
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_DB=$DATABASE_NAME
+    ports:
+      - $DATABASE_PORT:$DATABASE_PORT
+    volumes:
+      - db:/var/lib/postgres
+
+  app:
+    depends_on:
+      - postgresdb
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - $PORT:$PORT
+    environment:
+      - DATABASE_HOST=postgresdb
+      - DATABASE_USER=$DATABASE_USER
+      - DATABASE_PASSWORD=$DATABASE_PASSWORD
+      - DATABASE_NAME=$DATABASE_NAME
+      - DATABASE_PORT=$DATABASE_PORT
+      - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET_KEY=$GOOGLE_CLIENT_SECRET_KEY
+      - PORT=$PORT
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:

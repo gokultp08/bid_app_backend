@@ -16,7 +16,7 @@ title: "Sample Product 222"
 description: "This is a sample product description"
 endTime: "2024-12-31T23:59:59"
 owner: "gokul"
-price: "19.99"
+price: 19.99
 image: "sample_image_url.jpg"
 }) {
 id

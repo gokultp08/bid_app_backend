@@ -7,8 +7,6 @@ export class AppRepository {
   constructor(@InjectConnection() private readonly knex: Knex) {}
 
   async getTest(): Promise<any> {
-    const result = await this.knex.raw('SELECT * FROM "public"."user"');
-    return result.rows;
+    return process.env;
   }
-
 }
